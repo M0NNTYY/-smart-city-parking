@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Car Parking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+            overflow-x: hidden;
+            color: white;
+        }
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-right:5%;
+        }
+        .btn-logout:hover {
+            background-color: #a71d2a;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .left-panel, .right-panel {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .left-panel {
+            width: 30%;
+            text-align: center;
+        }
+        .right-panel {
+            width: 60%;
+            margin-left: 10%;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            padding: 20px;
+        }
+        .slot {
+            width: 50px;
+            height: 50px;
+            background-color: #28a745;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+        }
+        .booked {
+            background-color: #ff4444;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-advance {
+            background: #007bff;
+            color: white;
+        }
+        .btn-advance:hover {
+            background: #0056b3;
+        }
+        #advanceBookingForm {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #292929;
+            border-radius: 8px;
+        }
+        #advanceBookingForm input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+        .logo {
+            margin-left: 10px;
+            width: 50px; /* Adjust size */
+            height: auto;
+            margin-right: -20%;
+        }
+        .btn-allbookigs {
+            display: block;  /* Ensures proper spacing */
+            text-decoration: none;  /* Removes the underline */
+            border: none;           /* Removes any border */
+            background: #ffbd03;    /* Your button background */
+            color: black;           /* Text color */
+            padding: 12px 20px;     /* Adjust padding */
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width:88%;
+        }
+        
+        .selected {
+            background-color: yellow !important;
+            color: black;
+            border: 2px solid black;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        
+        <a href="/home">
+            <img src='../static/logo.png', filename='logo.png' alt="Logo" width="100" class='logo'>
+        </a>
+        <h1>IOT-Based Smart City Parking</h1>
+        <button class="btn-logout" onclick="location.href='/logout'">Logout</button>
+    </div>
+    <div class="content">
+        <div class="left-panel">
+            <h2>Booking Options</h2>
+            <button class="btn btn-advance" onclick="openAdvanceBooking()">Advance Booking</button>
+            <div id="advanceBookingForm">
+                <h3>Advance Booking</h3>
+                <input type="date" id="bookingDate" required>
+                <input type="time" id="checkinTime" required>
+                <input type="time" id="checkoutTime" required>
+                <h3>Payment (₹100)</h3>
+                <input type="text" id="cardNumber" placeholder="Card Number" required>
+                <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YY)" required>
+                <input type="text" id="cvv" placeholder="CVV" required>
+                <button class="btn btn-advance" onclick="advanceBooking()">Pay & Confirm Booking</button>
+            </div>
+            <a href="/my_bookings" class="btn-allbookigs">My Bookings</a>
+
+            
+        </div>
+        <div class="right-panel">
+            <h2>Parking Slots</h2>
+            <div class="grid" id="parkingGrid"></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const grid = document.getElementById("parkingGrid");
+            for (let i = 1; i <= 100; i++) {
+                let slot = document.createElement("div");
+                slot.classList.add("slot");
+                slot.textContent = i;
+                grid.appendChild(slot);
+            }
+        });
+        function openAdvanceBooking() {
+            document.getElementById("advanceBookingForm").style.display = "block";
+        }
+        function advanceBooking() {
+            let date = document.getElementById("bookingDate").value;
+            let checkin = document.getElementById("checkinTime").value;
+            let checkout = document.getElementById("checkoutTime").value;
+            let cardNumber = document.getElementById("cardNumber").value;
+            let expiryDate = document.getElementById("expiryDate").value;
+            let cvv = document.getElementById("cvv").value;
+            if (!date || !checkin || !checkout || !cardNumber || !expiryDate || !cvv) {
+                alert("Please fill all fields, including payment details.");
+                return;
+            }
+            alert("Booking confirmed with ₹100 payment!");
+        }
+    </script>
+    <script src="/static/js/bookings.js"></script>
+</body>
+</html>

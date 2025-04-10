@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner with Us: List Your Parking Space</title>
+    <link rel="stylesheet" href="../static/rental_space_form.css">
+    
+</head>
+<body>
+
+    <div class="logo-container">
+        <a href="/home">
+            <img src='../static/logo.png', filename='logo.png' alt="Logo" width="100" class='logo'>
+        </a>
+        <h1 id="Smart_Car_Parking">IOT-based Smart City Parking</h1>
+    </div>
+    <!-- FORM CONTAINER -->
+    <div class="container">
+        <h2>Partner with Us: List Your Parking Space</h2>
+        <form action="/submit_space" method="post">
+            <input type="text" name="owner_name" placeholder="Owner Name" required>
+            <input type="text" name="aadhaar_number" placeholder="Aadhaar Number (12 digits)" required pattern="\d{12}" title="Aadhaar number must be exactly 12 digits" maxlength="12">
+            <input type="tel" name="phone_number" placeholder="Phone Number (10 digits)" required pattern="\d{10}" title="Phone number must be exactly 10 digits" maxlength="10">
+            <input type="text" name="location" placeholder="Location" required>
+            <textarea name="description" placeholder="Descibe your parking space" required></textarea>
+            <input type="number" name="total_slots" placeholder="Total Parking Slots" required min="1">
+            <input type="number" name="price" placeholder="Price per hour (in ₹)" required>
+            <button type="submit">Submit</button>
+        </form>
+        
+        <p class="small-text">Already listed your space? <a href="dashboard.html">View Listings</a></p>
+    </div>
+
+</body>
+</html>

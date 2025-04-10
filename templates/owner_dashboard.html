@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Parking Slots</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.js"></script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #121212; color: white; margin: 0; padding: 20px; }
+        .top-bar { display: flex; justify-content: space-between; background-color: #1f1f1f; padding: 15px; border-radius: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 10px; padding: 20px; }
+        .slot { width: 50px; height: 50px; background-color: #28a745; display: flex; justify-content: center; align-items: center; border-radius: 8px; cursor: pointer; font-weight: bold; color: white; }
+        .booked { background-color: #ff4444; }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Owner Parking Slots</h1>
+        <button onclick="location.href='/logout'">Logout</button>
+    </div>
+    <div class="grid" id="parkingGrid"></div>
+
+    <script>
+        var socket = io();
+        function renderSlots(slots) {
+            let grid = document.getElementById("parkingGrid");
+            grid.innerHTML = "";
+            slots.forEach(slot => {
+                let div = document.createElement("div");
+                div.className = "slot" + (slot.status === "booked" ? " booked" : "");
+                div.innerText = slot.id;
+                div.onclick = () => bookSlot(slot.id);
+                grid.appendChild(div);
+            });
+        }
+        function bookSlot(slotId) {
+            let carNumber = prompt("Enter Car Number:");
+            if (carNumber) {
+                socket.emit("book_slot", { slot_id: slotId, car_number: carNumber });
+            }
+        }
+        socket.on("update_slots", data => renderSlots(data.slots));
+        socket.emit("get_slots");
+    </script>
+</body>
+</html>

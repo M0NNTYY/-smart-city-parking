@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+    <link rel="stylesheet" href="../static/bookings.css">
+</head>
+<body>
+    <header>
+        <h1>My Parking Bookings</h1>
+    </header>
+
+    <div class="bookings-container">
+        {% if bookings %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Slot Number</th>
+                        <th>Booking Date</th>
+                        <th>Check-in Time</th>
+                        <th>Check-out Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.slot_number }}</td>
+                        <td>{{ booking.booking_date }}</td>
+                        <td>{{ booking.checkin_time }}</td>
+                        <td>{{ booking.checkout_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="no-bookings">No bookings found.</p>
+        {% endif %}
+    </div>
+
+    <div class="button-container">
+        <a href="/user_parking_slots" class="btn">Back to Parking Slots</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Car Parking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #121212;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100vw;
+            overflow-x: hidden;
+            color: white;
+        }
+        .top-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-right:5%;
+        }
+        .btn-logout:hover {
+            background-color: #a71d2a;
+        }
+        .content {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .left-panel, .right-panel {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .left-panel {
+            width: 30%;
+            text-align: center;
+        }
+        .right-panel {
+            width: 60%;
+            margin-left: 10%;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            padding: 20px;
+        }
+        .slot {
+            width: 50px;
+            height: 50px;
+            background-color: #28a745;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            transition: 0.3s;
+        }
+        .slot:hover {
+            transform: scale(1.1);
+        }
+        .booked {
+            background-color: #ff4444;
+        }
+        .btn-instantbooking{
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            
+        }
+
+        .btn-allbookings {
+            display: inline-block;
+            width: 88%;  /* Ensures it's a proper button */
+            text-decoration: none;  /* Removes underline */
+            border: none;           /* Removes any border */
+            background: #ffbd03;    /* Button background */
+            color: black;           /* Text color */
+            padding: 12px 20px;     /* Adjust padding */
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            
+        }
+        
+        .btn-allbookings:hover {
+            background: #d39e00;  /* Darker shade on hover */
+            color: white;
+        }
+        
+        .btn-advance {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        .btn-advance:hover {
+            background: #0056b3;
+        }
+        #advanceBookingForm {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: #292929;
+            border-radius: 8px;
+        }
+        #advanceBookingForm input, #carNumber {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            border: 1px solid #555;
+        }
+        .logo {
+            margin-left: 10px;
+            width: 50px; /* Adjust size */
+            height: auto;
+            margin-right: -20%;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        
+        <a href="/home">
+            <img src='../static/logo.png', filename='logo.png' alt="Logo" width="100" class='logo'>
+        </a>
+        <h1>IOT-Based Smart City Parking</h1>
+        <button class="btn-logout" onclick="location.href='/logout'">Logout</button>
+    </div>
+    <div class="content">
+        <div class="left-panel">
+            <h2>Booking Options</h2>
+            <button class="btn-instantbooking" onclick="realTimeBooking()">Instant Booking</button>
+            <button class="btn btn-advance" onclick="openAdvanceBooking()">Advance Booking</button>
+            <div id="advanceBookingForm">
+                <h3>Advance Booking</h3>
+                <input type="date" id="bookingDate" required>
+                <input type="time" id="checkinTime" required>
+                <input type="time" id="checkoutTime" required>
+                <h3>Payment (₹100)</h3>
+                <input type="text" id="cardNumber" placeholder="Card Number" required>
+                <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YY)" required>
+                <input type="text" id="cvv" placeholder="CVV" required>
+                <button class="btn btn-advance" onclick="advanceBooking()">Pay & Confirm Booking</button>
+            </div>
+            <a href="/all_bookings" class="btn-allbookings">All Bookings</a>
+
+        </div>
+        <div class="right-panel">
+            <h2>Parking Slots</h2>
+            <div class="grid" id="parkingGrid"></div>
+        </div>
+    </div>
+    <script>
+        function openAdvanceBooking() {
+            let form = document.getElementById("advanceBookingForm");
+            form.style.display = (form.style.display === "block") ? "none" : "block";
+        }
+        
+        function advanceBooking() {
+            let bookingDate = document.getElementById("bookingDate").value;
+            let checkinTime = document.getElementById("checkinTime").value;
+            let checkoutTime = document.getElementById("checkoutTime").value;
+            let cardNumber = document.getElementById("cardNumber").value;
+            let expiryDate = document.getElementById("expiryDate").value;
+            let cvv = document.getElementById("cvv").value;
+        
+            if (!bookingDate || !checkinTime || !checkoutTime || !cardNumber || !expiryDate || !cvv) {
+                alert("Please fill in all fields!");
+                return;
+            }
+        
+            let availableSlots = document.querySelectorAll(".slot:not(.booked)");
+            if (availableSlots.length === 0) {
+                alert("No available slots for advance booking!");
+                return;
+            }
+        
+            let selectedSlot = availableSlots[0]; // Select the first available slot
+            let slotNumber = selectedSlot.dataset.slotNumber;
+            let carNumber = prompt("Enter Car Number:");
+        
+            if (!carNumber) {
+                alert("Car number is required for advance booking!");
+                return;
+            }
+        
+            // Emit event to the server
+            socket.emit("advance_booking", {
+                slot: slotNumber,
+                date: bookingDate,
+                checkin: checkinTime,
+                checkout: checkoutTime,
+                car: carNumber
+            });
+        
+            alert("Advance booking successful!");
+            document.getElementById("advanceBookingForm").style.display = "none";
+        }
+        
+            const socket = io.connect(window.location.origin);
+        
+            document.addEventListener("DOMContentLoaded", function () {
+                const grid = document.getElementById("parkingGrid");
+            
+                for (let i = 1; i <= 100; i++) {
+                    let slot = document.createElement("div");
+                    slot.classList.add("slot");
+                    slot.textContent = i;
+                    slot.dataset.slotNumber = i;
+            
+                    slot.addEventListener("click", function () {
+                        if (slot.classList.contains("booked")) {
+                            let action = confirm("Car Number: " + slot.dataset.carNumber + "\nDo you want to cancel this booking?");
+                            if (action) cancelBooking(i);
+                        }
+                    });
+            
+                    grid.appendChild(slot);
+                }
+            }); // ✅ Make sure this closing bracket and parenthesis exist!
+            
+        
+                socket.on("update_slot", function (data) {
+                    let slot = document.querySelector(`[data-slot-number='${data.slot}']`);
+                    if (slot) {
+                        slot.classList.add("booked");
+                        slot.style.backgroundColor = "#ff4444";
+                        slot.dataset.carNumber = data.car;
+                    }
+                });
+        
+
+            function realTimeBooking() {
+                let availableSlots = document.querySelectorAll(".slot:not(.booked)");
+                if (availableSlots.length === 0) {
+                    alert("No available slots for instant booking!");
+                    return;
+                }
+        
+                let smallestSlot = [...availableSlots].reduce((min, slot) => 
+                    parseInt(slot.dataset.slotNumber) < parseInt(min.dataset.slotNumber) ? slot : min
+                );
+        
+                let carNumber = prompt("Enter Car Number:");
+                if (!carNumber) {
+                    alert("Car number is required for booking!");
+                    return;
+                }
+        
+                socket.emit("instant_booking", { slot: smallestSlot.dataset.slotNumber, car: carNumber });
+            }
+        
+            function cancelBooking(slotNumber) {
+                socket.emit("cancel_slot_request", { slot: slotNumber });
+            }
+
+            socket.on("cancel_slot", function (data) {
+                let slot = document.querySelector(`[data-slot-number='${data.slot}']`);
+                if (slot) {
+                    slot.classList.remove("booked");
+                    slot.style.backgroundColor = "#28a745";
+                    slot.dataset.carNumber = "";
+                    
+                    // Force UI refresh
+                    slot.offsetHeight; // Trigger reflow
+                }
+            });
+            
+        </script>
+
+    
+    
+</body>
+</html>

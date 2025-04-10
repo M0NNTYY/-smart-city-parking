@@ -1,0 +1,61 @@
+/* Center the form and style it like the rental space form */
+.container {
+    width: 400px; /* Fixed width for the form */
+    background: #333; /* Dark background */
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.1);
+    margin: 50px auto; /* Centers the form */
+}
+
+/* Center the title and headings */
+h1, h2 {
+    color: white;
+    text-align: center;
+}
+
+/* Input fields */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background: white;
+    font-size: 16px;
+}
+
+/* Register button */
+button {
+    width: 100%;
+    background: #f5a623;
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #d48c1b;
+}
+
+/* "Already have an account?" text */
+.small-text {
+    margin-top: 15px;
+    color: white;
+    font-size: 14px;
+}
+
+.small-text a {
+    color: #f5a623;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.small-text a:hover {
+    text-decoration: underline;
+}

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parking Slots</title>
+    <link rel="stylesheet" href="../static/parking_slots.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        h2 {
+            color: #333;
+        }
+        .slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            padding: 20px;
+        }
+        .slot-box {
+            padding: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .available {
+            background-color: #28a745;
+            color: white;
+        }
+        .booked {
+            background-color: #dc3545;
+            color: white;
+            cursor: not-allowed;
+        }
+        .slot-box:hover:not(.booked) {
+            transform: scale(1.05);
+        }
+        .logo {
+            margin-left: 10px;
+            width: 50px; /* Adjust size */
+            height: auto;
+            margin-right: -20%;
+        }
+        .top-bar {margin-left:-2%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+            margin-right:5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="top-bar">
+        
+            <a href="/home">
+                <img src='../static/logo.png', filename='logo.png' alt="Logo" width="100" class='logo'>
+            </a>
+            <h2>Parking Slots for {{ parking_space.location }}</h2>
+            <button class="btn-logout" onclick="location.href='/logout'">Logout</button>
+        </div>
+       
+        <div class="slots-grid">
+            {% for slot in slots %}
+                <div class="slot-box {% if slot.status == 'available' %} available {% else %} booked {% endif %}" 
+                     onclick="bookSlot({{ slot.id }})">
+                    Slot {{ slot.slot_number }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        var socket = io.connect("http://localhost:5000");
+
+        function bookSlot(slotId) {
+            fetch("/book_parking_slot", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ slot_id: slotId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    alert(data.message);
+                    socket.emit("request_update");  // Notify other users
+                } else {
+                    alert(data.message);
+                }
+            });
+        }
+
+        socket.on("update_slots", function() {
+            location.reload(); // Refresh page when a slot is booked
+        });
+    </script>
+</body>
+</html>

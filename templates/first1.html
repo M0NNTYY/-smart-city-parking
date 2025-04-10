@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Car Parking</title>
+    <link rel="stylesheet" href="../static/first1.css">
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <a href="/home">
+                <img src='../static/logo.png', filename='logo.png' alt="Logo" width="100" class='logo'>
+            </a>
+            <h1 id="Smart_Car_Parking">IOT-Based Smart City Parking</h1>
+           
+        </div>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="/register_owner">Rental Space</a></li>
+                <li><a href="#contact">Contact</a></li>
+    
+               
+                    <li><a href="/view_parking_slots/<int:space_id>">view Parking space</a></li>
+                    <li><a href="/register">Register</a></li>
+                
+        </nav>
+    </header>
+    
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Smart IOT-Based Parking Solution</h2>
+            <p>Efficient, secure and easy-to-use parking system for smart cities.</p>
+            <a href="/login" class="btn">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Car Parking Display -->
+    
+        <video autoplay muted loop id="parking-video">
+            <source src="../static/car-parking.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    
+    <section id="about">
+        <h2>About Us</h2>
+        <p>We provide intelligent parking solutions using IoT to reduce congestion and enhance parking efficiency.</p>
+    </section>
+    
+    <section id="services">
+        <h2>Our Services</h2>
+        <div class="services-container">
+            <div class="service">
+                <h3>Real-time Parking Updates</h3>
+                <p>Get live updates on available parking spots in your area.</p>
+            </div>
+            <div class="service">
+                <h3>Secure & Automated</h3>
+                <p>Seamless and secure parking experience with automated entry and exit.</p>
+            </div>
+            <div class="service">
+                <h3>Mobile Integration</h3>
+                <p>Book and manage your parking with our mobile-friendly interface.</p>
+                
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 Smart Car Parking. All rights reserved.</p>
+        <p style="color:red;">It is just a prototype.</p>
+    </footer>
+</body>
+</html>
