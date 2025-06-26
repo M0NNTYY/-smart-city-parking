@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, render_template, request, redirect, session, flash, jsonify, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_socketio import SocketIO, emit
@@ -5,8 +8,7 @@ from flask_socketio import SocketIO, emit
 import pymysql
 from flask_bcrypt import Bcrypt
 
-import eventlet
-eventlet.monkey_patch()
+
 
 import os
 
