@@ -8,7 +8,12 @@ from flask_bcrypt import Bcrypt
 
 from firebase_admin import credentials, firestore, initialize_app
 import os
+port = int(os.environ.get("PORT", 10000))
 from datetime import datetime
+import eventlet
+import eventlet.wsgi
+
+
 
 if os.environ.get("RENDER") == "true":
     cred_path = "/etc/secrets/serviceAccountKey.json"
@@ -321,6 +326,4 @@ def test_connection():
     socketio.emit('slot_update', {"slot": 1, "status": 1})
     
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    print(f"Running on http://localhost:{port}")
-    socketio.run(app, host="0.0.0.0", port=port, debug=True, use_reloader=False)
+    socketio.run(app, host="0.0.0.0", port=port)
