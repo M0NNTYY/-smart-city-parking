@@ -1,5 +1,5 @@
-import eventlet
-eventlet.monkey_patch()
+# import eventlet
+# eventlet.monkey_patch()
 
 from flask import Flask, render_template, request, redirect, session, flash, jsonify, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,13 +10,20 @@ from firebase_admin import credentials, firestore, initialize_app
 import os
 from datetime import datetime
 
+if os.environ.get("RENDER") == "true":
+    cred_path = "/etc/secrets/serviceAccountKey.json"
+else:
+    cred_path = "serviceAccountKey.json"
+
 # Initialize Firebase
-cred = credentials.Certificate("/etc/secrets/serviceAccountKey.json")
+# cred = credentials.Certificate("/etc/secrets/serviceAccountKey.json")
+cred = credentials.Certificate(cred_path)
 initialize_app(cred)
 db = firestore.client()
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")
+
 app.secret_key = "your_secret_key"
 bcrypt = Bcrypt(app)
 
@@ -71,7 +78,7 @@ def login():
             session['email'] = email
             session['role'] = "guard"
             flash("Guard login successful!", "success")
-            return redirect("/guard_bookings")
+            return redirect("/guard_parking_slots")
 
         user_docs = db.collection("users").where("email", "==", email).get()
         user = None
@@ -88,6 +95,13 @@ def login():
             return redirect("/login")
 
     return render_template("login.html")
+
+@app.route("/guard_parking_slots")
+def guard_parking_slots():
+    if session.get('role') != "guard":
+        flash("Unauthorized access!", "danger")
+        return redirect("/login")
+    return render_template("guard_parking_slots.html")
 
 @app.route("/user_parking_slots")
 def parking_slots():
@@ -305,7 +319,8 @@ def handle_cancel_slot(data):
 def test_connection():
     print("A user connected")
     socketio.emit('slot_update', {"slot": 1, "status": 1})
-
+    
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    socketio.run(app, host="0.0.0.0", port=port)
+    print(f"Running on http://localhost:{port}")
+    socketio.run(app, host="0.0.0.0", port=port, debug=True, use_reloader=False)

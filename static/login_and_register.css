@@ -98,13 +98,6 @@ button:hover {
     text-decoration: underline;
 }
 
-/* Responsive Design */
-@media screen and (max-width: 480px) {
-    .auth-container {
-        width: 90%;
-    }
-}
-
 /* Logo and title container */
 .logo-container {
     display: flex;
@@ -127,4 +120,48 @@ button:hover {
     font-size: 24px;
     font-weight: bold;
     color: white; */
+}
+
+/* Responsive Design */
+@media (max-width: 360px) {
+
+    .logo-container {
+    background-color: #222;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    
+  
+}
+
+    .logo {
+    margin-left: 15px;
+    width: 35px; /* Adjust size */
+    height: 35px;
+    margin-top: 5px;
+    margin-right: 10px;
+  
+}
+
+#Smart_Car_Parking{
+    margin-left: 5px;
+    margin-top: 10px;
+    font-size: 20px;
+   
+} 
+body{
+    background-color: #333
+}
+.auth-container{
+    background-color:#222 ;
+    width: 80%;
+}
+
+form input{
+    width: 95%;
+}
+    
+form button{
+    width: 100px;
+}
 }

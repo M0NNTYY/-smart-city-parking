@@ -124,58 +124,230 @@ nav ul li a:hover {
     box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
     margin-top: 20px;
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .hero h2 {
-        font-size: 1.8rem;
-    }
-    .hero p {
-        font-size: 1rem;
-    }
-    .btn {
-        font-size: 1rem;
-        padding: 10px 20px;
-    }
-    .parking-spot {
-        width: 100px;
-        height: 180px;
-        transform: rotate(-10deg);
-    }
+.logo-container{
+    height:85px;
 }
-
-/* Logo and title container */
+.logo{
+    margin-right:93% ;
+    margin-top: 15px;
+    height: 50px;
+    width:60px
+}
+#Smart_Car_Parking{
+    font-size: 40px;
+    margin-top: -50px;
+}
+/* Responsive Design */
+@media (max-width: 360px) {
+    body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+ 
+}
 .logo-container {
+    height: 50px;
     display: flex;
     align-items: center;
+    
+  
 }
 
 /* Logo Image */
 .logo {
-    margin-left: 20px;
-    width: 50px; /* Adjust size */
-    height: auto;
+    margin-left: 15px;
+    width: 35px; /* Adjust size */
+    height: 35px;
+    margin-top: 5px;
     margin-right: 10px;
+  
 }
 
 #Smart_Car_Parking{
-    margin-left: 27%;
+    margin-left: 5px;
+    margin-top: 10px;
+    font-size: 20px;
+   
+}
+/* Header */
+h1 {
+    margin-top: 20px;
+    font-size: 2.5rem;
+   
 }
 
-.logout-container {
-    margin-left: auto; /* Push Logout to the right */
+/* .nav-container{
+  overflow-x: hidden;  
+}  */
+/* Navigation */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
+    padding: 5px 0;
+   
 }
 
-.logout-btn {
-    background: #dc3545;
+nav ul li {
+    margin: 0 5px;
+   
+}
+
+nav ul li a {
     color: white;
-    padding: 10px 15px;
     text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 12px;
+    font-weight: 500;
+   
+    transition: color 0.3s ease-in-out;
 }
 
-.logout-btn:hover {
-    background: #c82333;
+nav ul li a:hover {
+    color: orange;
+ 
+}
+
+/* Hero Section */
+.hero {
+   background-color: black;
+    padding: 20px 20px;
+    text-align: center;
+   
+}
+
+.hero-content {
+    max-width: 600px;
+    margin: auto;
+    
+}
+
+.hero h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  
+}
+
+.hero p {
+    font-size: 20px;
+    opacity: 0.8;
+  
+}
+
+/* Call-to-Action Button */
+.btn {
+    display: inline-block;
+    background-color: orange;
+    color: white;
+    padding: 12px 25px;
+    margin-top: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background-color: darkorange;
+}
+#about h2{
+    font-size:20px;
+    
+}
+
+#about p{
+    font-size: 13px;
+  
+}
+
+#services h2{
+    font-size:20px;
+    
+
+}
+
+#services p{
+    font-size:13px;
+    
+}
+#services h3{
+    font-size:20px;
+    
+
+}
+
+#services p{
+    font-size:13px;
+   
+
+}
+ 
+footer p{
+     font-size:15px;
+     overflow-x: hidden;
+}
+/* Parking Lot */
+.parking-lot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow-x: hidden;
+    padding: 10px;
+    gap: 10px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.parking-spot {
+   width: 100px;
+    height: 180px;
+    transform: rotate(-10deg); 
+    background-color: #2c2c2c;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out;
+   
+}
+
+.parking-spot:hover {
+    transform: rotate(-10deg) scale(1.05);
+    
+}
+
+/* Car Images */
+.parking-spot img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+   
+}
+
+/* Video Styling */
+#parking-video {
+    width: 85%;
+    height: auto;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.5);
+    margin-top: 20px;
+   
+}
+}
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
 }
